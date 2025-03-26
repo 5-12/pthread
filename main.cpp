@@ -8,7 +8,7 @@ void pr_j(long long int *q)
 {
 	while (true)
 	{
-		std::lock_guard<std::mutex>lock(num);
+		std::unique_lock<std::mutex>lock(num);
 		(*q)++;
 		std::cout << *q << std::endl;
 		if (stop_tag.load() == true)
@@ -21,7 +21,7 @@ void print_o(long long int *q)
 {
 	while (true)
 	{
-		std::lock_guard<std::mutex>lock(num);
+		std::unique_lock<std::mutex>lock(num);
 		(*q)++;
 		std::cout << *q << std::endl;
 		if(stop_tag.load() == true)
@@ -33,7 +33,7 @@ void print_o(long long int *q)
 void stops()
 {
 	int a = 0;
-	while (a != 10000000000)
+	while (a != 1000000000)
 	{
 		++a;
 	}
