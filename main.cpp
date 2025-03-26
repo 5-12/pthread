@@ -1,52 +1,22 @@
+#include <iostream>
 #include <thread>
 #include <mutex>
-#include <iostream>
+#include <vector>
+#include <atomic>
+std::vector<int> test[1000];
+std::mutex mu;
+std::atomic<int>test[100];
+void in(void)
+{
+	std::unique_lock<std::mutex> mu;
 
-std::mutex num;
-std::atomic<bool>stop_tag = { false };
-void pr_j(long long int *q)
-{
-	while (true)
-	{
-		std::unique_lock<std::mutex>lock(num);
-		(*q)++;
-		std::cout << *q << std::endl;
-		if (stop_tag.load() == true)
-		{
-			return;
-		}
-	}
 }
-void print_o(long long int *q)
+void out(void)
 {
-	while (true)
-	{
-		std::unique_lock<std::mutex>lock(num);
-		(*q)++;
-		std::cout << *q << std::endl;
-		if(stop_tag.load() == true)
-		{
-			return;
-		}
-	}
-}
-void stops()
-{
-	int a = 0;
-	while (a != 1000000000)
-	{
-		++a;
-	}
-	stop_tag.store(true);
+	std::unique_lock<std::mutex> mu;
+
 }
 int main(void)
 {
-	long long int nums=0;
-	std::thread t1(pr_j, &nums);
-	std::thread t2(print_o, &nums);
-	std::thread t3(stops);
-	t1.join();
-	t2.join();
-	t3.join();
-
+	;
 }
