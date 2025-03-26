@@ -1,7 +1,6 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
-
 std::mutex num;
 std::atomic<bool>stop_tag = { false };
 void pr_j(long long int *q)
