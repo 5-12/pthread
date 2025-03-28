@@ -4,31 +4,43 @@
 #include <vector>
 #include <atomic>
 #include <queue>
-std::queue<int> test[1000];
+#include <condition_variable>
+//std::queue<int> test[1000];
 std::mutex mu;
-//std::atomic<int>test[100];
-std::atomic<bool>max{ false };
-std::atomic<bool>nome{ false };
+std::vector<int>test;
 std::condition_variable cv;
+bool ok = { false };
+//std::condition_variable cv;
 void in(void)
 {
-	while (true)
+    std::unique_lock<std::mutex> lock(mu);
+	//std::condition_variable cv;
+	for (int i = 0; i < 10; i++)
 	{
-		std::unique_lock<std::mutex> ;
+		std::cout << "add " << i << std::endl;
+		test.push_back(i);
 	}
+	ok = true;
+	cv.notify_one();
+	return;
 }
 void out(void)
 {
-	while (true)
+	std::unique_lock<std::mutex> lock(mu);
+	int time_put=0;
+	cv.wait(lock ,[] {return ok;});
+	for (int i = 0; i < 10; i++)
 	{
-		
+		std::cout << "pull" << i << std::endl;
+		test.pop_back();
 	}
-	
+	return;
 }
 int main(void)
 {
-	std::thread in_pr(in);
-	std::thread out_pr(out);
+	std::thread in_pr(out);
+	std::thread out_pr(in);
 	in_pr.join();
 	out_pr.join();
+
 }
